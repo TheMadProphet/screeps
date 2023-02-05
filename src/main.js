@@ -1,6 +1,6 @@
 require("Creep/Prototype");
+require("Creep/Spawner");
 require("Structure/Prototype/Room");
-require("Structure/Prototype/StructureSpawn");
 
 const constructor = require("Structure/Constructor");
 const structureTower = require("Structure/Tower");
