@@ -3,7 +3,6 @@ require("Structure/Prototype/Room");
 require("Structure/Prototype/StructureSpawn");
 
 const constructor = require("Structure/Constructor");
-const spawner = require("Creep/Spawner");
 const structureTower = require("Structure/Tower");
 const roleHarvester = require("Creep/Role/Harvester");
 const roleBuilder = require("Creep/Role/Builder");
