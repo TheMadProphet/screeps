@@ -26,10 +26,6 @@
             }
         }
     };
-
-    this.isConstructionSiteAvailable = function () {
-        return this.find(FIND_MY_CONSTRUCTION_SITES).length > 0;
-    };
 }.call(Room.prototype));
 
 Object.defineProperty(Room.prototype, "spawn", {
@@ -54,6 +50,18 @@ Object.defineProperty(Room.prototype, "availableExtension", {
         }
 
         return this._availableExtension;
+    },
+    enumerable: false,
+    configurable: true
+});
+
+Object.defineProperty(Room.prototype, "constructionSites", {
+    get: function () {
+        if (!this._constructionSites) {
+            this._constructionSites = this.find(FIND_MY_CONSTRUCTION_SITES);
+        }
+
+        return this._constructionSites;
     },
     enumerable: false,
     configurable: true

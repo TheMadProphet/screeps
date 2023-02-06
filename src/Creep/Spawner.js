@@ -134,7 +134,7 @@ function getUpgraderBody(maxEnergy) {
     };
 
     this.spawnBuilders = function () {
-        if (this.room.isConstructionSiteAvailable()) {
+        if (this.room.constructionSites.length) {
             const builders = this.creepsByRole["builder"];
             const maxBuilders = this.room.controller.level;
             if (!builders || !builders.length || builders.length < maxBuilders) {

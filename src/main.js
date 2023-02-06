@@ -11,7 +11,6 @@ const roleHandyman = require("Creep/Role/Handyman");
 
 /**
  * TODO:
- * hasAvailableExtensions() -> availableExtensions
  * remove tombstones/ruins
  *
  * use foreach instead of for

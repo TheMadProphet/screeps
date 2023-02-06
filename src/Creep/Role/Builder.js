@@ -1,16 +1,14 @@
 Creep.prototype.buildConstruction = function () {
     const closestConstruction = this.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
-    if (closestConstruction) {
-        if (this.build(closestConstruction) === ERR_NOT_IN_RANGE) {
-            this.moveTo(closestConstruction, {visualizePathStyle: {stroke: "#ffffff"}});
-        }
+    if (this.build(closestConstruction) === ERR_NOT_IN_RANGE) {
+        this.moveTo(closestConstruction, {visualizePathStyle: {stroke: "#ffffff"}});
     }
 };
 
 const builder = {
     /** @param {Creep} creep **/
     run: function (creep) {
-        if (!creep.room.isConstructionSiteAvailable()) {
+        if (!creep.room.constructionSites.length) {
             creep.idle();
             return;
         }
