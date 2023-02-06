@@ -11,6 +11,9 @@ const roleHandyman = require("Creep/Role/Handyman");
 
 /**
  * TODO:
+ * hasAvailableExtensions() -> availableExtensions
+ * remove tombstones/ruins
+ *
  * use foreach instead of for
  * console log improvement
  *
@@ -20,6 +23,7 @@ const roleHandyman = require("Creep/Role/Handyman");
  * determine amount of extra upgraders (distance)
  *
  * auto tower placement
+ * mine other rooms
  */
 module.exports.loop = function () {
     for (const roomName in Game.rooms) {

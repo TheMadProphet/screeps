@@ -46,7 +46,7 @@ function getUpgraderBody(maxEnergy) {
     }
 
     const upgraderPartFitCount = Math.trunc(maxEnergy / upgraderPartsCost);
-    let body = getBasicBody(maxEnergy - upgraderPartsCost);
+    let body = getBasicBody(maxEnergy - upgraderPartsCost * upgraderPartFitCount);
     for (let i = 0; i < upgraderPartFitCount; i++) {
         body.push(...upgraderPartsConfig);
     }
@@ -80,10 +80,12 @@ function getUpgraderBody(maxEnergy) {
     };
 
     this.spawn = function (body, memory) {
-        const spawnStatus = this.spawnCreep(body, `${memory.role}[${bodyCost(body)}](${Game.time})`, {memory});
+        const creepName = `${memory.role}[${bodyCost(body)}]`;
+        const spawnStatus = this.spawnCreep(body, creepName + `(${Game.time})`, {memory});
 
         if (spawnStatus === ERR_NOT_ENOUGH_ENERGY) {
             this.memory.hasEnoughEnergy = false;
+            this.memory.wantsToSpawn = creepName;
         }
 
         return spawnStatus;
@@ -146,7 +148,7 @@ function getUpgraderBody(maxEnergy) {
         const controller = this.room.controller;
         const upgraders = this.creepsByRole["upgrader"];
 
-        let maxUpgraders = 5 + extraCreepCountForDistance(this.pos, controller.pos);
+        let maxUpgraders = 3 + extraCreepCountForDistance(this.pos, controller.pos);
         if (controller.level === 1 || this.room.hasAvailableExtensions()) {
             maxUpgraders = 1;
         } else if (controller.level === 2) {
