@@ -30,10 +30,6 @@
     this.isConstructionSiteAvailable = function () {
         return this.find(FIND_MY_CONSTRUCTION_SITES).length > 0;
     };
-
-    this.hasAvailableExtensions = function () {
-        return getAvailableStructure(this, STRUCTURE_EXTENSION) > 0;
-    };
 }.call(Room.prototype));
 
 Object.defineProperty(Room.prototype, "spawn", {
@@ -46,6 +42,18 @@ Object.defineProperty(Room.prototype, "spawn", {
         }
 
         return this._spawn;
+    },
+    enumerable: false,
+    configurable: true
+});
+
+Object.defineProperty(Room.prototype, "availableExtension", {
+    get: function () {
+        if (!this._availableExtension) {
+            this._availableExtension = getAvailableStructure(this, STRUCTURE_EXTENSION);
+        }
+
+        return this._availableExtension;
     },
     enumerable: false,
     configurable: true

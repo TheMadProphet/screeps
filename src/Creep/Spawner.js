@@ -149,7 +149,7 @@ function getUpgraderBody(maxEnergy) {
         const upgraders = this.creepsByRole["upgrader"];
 
         let maxUpgraders = 3 + extraCreepCountForDistance(this.pos, controller.pos);
-        if (controller.level === 1 || this.room.hasAvailableExtensions()) {
+        if (controller.level === 1 || this.room.availableExtension > 0) {
             maxUpgraders = 1;
         } else if (controller.level === 2) {
             maxUpgraders = 3;

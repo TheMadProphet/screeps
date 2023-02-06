@@ -1,6 +1,3 @@
-const roleHarvester = require("Creep/Role/Harvester");
-const structureConstructor = require("Structure/Constructor");
-
 Creep.prototype.buildConstruction = function () {
     const closestConstruction = this.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
     if (closestConstruction) {
@@ -14,9 +11,7 @@ const builder = {
     /** @param {Creep} creep **/
     run: function (creep) {
         if (!creep.room.isConstructionSiteAvailable()) {
-            // structureConstructor.startNextConstruction(creep.room);
             creep.idle();
-            // roleHarvester.harvestAny(creep);
             return;
         }
 

@@ -221,7 +221,7 @@ const constructor = {
     /** @param {Room} room **/
     buildStructures: function (room) {
         if (!room.isConstructionSiteAvailable()) {
-            if (room.hasAvailableExtensions()) {
+            if (room.availableExtension > 0) {
                 buildExtensions(room);
             }
         }
