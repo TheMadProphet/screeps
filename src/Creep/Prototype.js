@@ -2,7 +2,8 @@
     this.findBestEnergySource = function () {
         const closestContainerWithEnergy = this.pos.findClosestByPath(FIND_STRUCTURES, {
             filter: structure =>
-                structure.structureType === STRUCTURE_CONTAINER && structure.store.getUsedCapacity() > 50
+                (structure.structureType === STRUCTURE_CONTAINER && structure.store.getUsedCapacity() > 50) ||
+                (structure.structureType === STRUCTURE_STORAGE && structure.store.getUsedCapacity(RESOURCE_ENERGY) > 50)
         });
 
         if (closestContainerWithEnergy) {
@@ -90,11 +91,13 @@
     };
 }.call(Creep.prototype));
 
+// todo improve (.store)
 const hasEnergyStorage = target => {
     return (
         target.structureType === STRUCTURE_SPAWN ||
         target.structureType === STRUCTURE_EXTENSION ||
-        target.structureType === STRUCTURE_CONTAINER
+        target.structureType === STRUCTURE_CONTAINER ||
+        target.structureType === STRUCTURE_STORAGE
     );
 };
 
