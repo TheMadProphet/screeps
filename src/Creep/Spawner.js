@@ -81,7 +81,7 @@ function getUpgraderBody(maxEnergy) {
 
     this.spawn = function (body, memory) {
         const creepName = `${memory.role}[${bodyCost(body)}]`;
-        const spawnStatus = this.spawnCreep(body, creepName + `(${Game.time})`, {memory});
+        const spawnStatus = this.spawnCreep(body.sort(), creepName + `(${Game.time})`, {memory});
 
         if (spawnStatus === ERR_NOT_ENOUGH_ENERGY) {
             this.memory.hasEnoughEnergy = false;
