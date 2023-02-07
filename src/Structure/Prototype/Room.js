@@ -28,7 +28,7 @@
     };
 
     this.fillersAreEnabled = function () {
-        return this.controller.level >= 4 && this.storage;
+        return this.controller.level >= 4 && this.storage !== null && this.storage !== undefined;
     };
 
     this.hasEnergyEmergency = function () {
