@@ -2,7 +2,7 @@ require("Creep/Prototype");
 require("Creep/Spawner");
 require("Structure/Prototype/Room");
 
-const improvedConsole = require("Util/Console");
+const ConsoleUtil = require("Util/Console");
 
 const constructor = require("Structure/Constructor");
 const structureTower = require("Structure/Tower");
@@ -21,11 +21,9 @@ const structureTower = require("Structure/Tower");
  * mine other rooms
  */
 module.exports.loop = function () {
-    improvedConsole.apply();
+    ConsoleUtil.improveLog();
 
-    for (const roomName in Game.rooms) {
-        const room = Game.rooms[roomName];
-
+    _.forEach(Game.rooms, room => {
         constructor.buildInfrastructure(room);
         constructor.buildStructures(room);
 
@@ -33,7 +31,7 @@ module.exports.loop = function () {
 
         structureTower.automate(Game.getObjectById("63dda0ea034ca354399c6fce")); // todo
         room.drawVisuals();
-    }
+    });
 
     _.forEach(Game.creeps, creep => creep.runRole());
 };

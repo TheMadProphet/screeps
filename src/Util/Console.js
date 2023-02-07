@@ -1,6 +1,9 @@
 const consoleLog = console.log;
 
-function apply() {
+/**
+ * Override original console.log() and convert objects to JSON string
+ */
+function improveLog() {
     console.log = function (...dataList) {
         const transformedData = _.map(dataList, data => {
             if (typeof data === "object") {
@@ -14,4 +17,4 @@ function apply() {
     };
 }
 
-module.exports = {apply};
+module.exports = {improveLog};
