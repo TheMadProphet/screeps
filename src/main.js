@@ -16,6 +16,7 @@ const structureTower = require("Structure/Tower");
  * filler, miner, hauler roles. External room mining
  *
  * harvesters spawn #1
+ * sort body parts
  *
  * auto tower placement
  * mine other rooms

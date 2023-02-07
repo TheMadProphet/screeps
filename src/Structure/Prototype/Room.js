@@ -27,14 +27,14 @@
         }
     };
 
-    this.fillersAreEnabled = function() {
+    this.fillersAreEnabled = function () {
         return this.controller.level >= 4 && this.storage;
     };
 
-    this.hasEnergyEmergency = function() {
+    this.hasEnergyEmergency = function () {
         if (!this.storage) return false;
 
-        return this.storage.store.getUsedCapacity(RESOURCE_ENERGY) >= this.energyCapacityAvailable * 2;
+        return this.storage.store.getUsedCapacity(RESOURCE_ENERGY) <= this.energyCapacityAvailable * 2;
     };
 
     this.drawVisuals = function () {
@@ -66,6 +66,14 @@
                 stroke: "#000000",
                 strokeWidth: 0.1
             });
+            if (this.hasEnergyEmergency()) {
+                this.visual.text(`Emergency: ${this.hasEnergyEmergency()}`, x, y++, {
+                    align: "left",
+                    color: "#e09107",
+                    stroke: "#000000",
+                    strokeWidth: 0.1
+                });
+            }
             this.drawRoleStats(x, y++, "harvester");
 
             y++;
