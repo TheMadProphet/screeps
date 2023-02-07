@@ -2,6 +2,8 @@ require("Creep/Prototype");
 require("Creep/Spawner");
 require("Structure/Prototype/Room");
 
+const improvedConsole = require("Util/Console");
+
 const constructor = require("Structure/Constructor");
 const structureTower = require("Structure/Tower");
 const roleHarvester = require("Creep/Role/Harvester");
@@ -14,7 +16,6 @@ const roleHandyman = require("Creep/Role/Handyman");
  * role count based on WORK / available energy per tick
  *
  * use foreach instead of for
- * console log improvement
  *
  * filler role, build containers near sources
  *
@@ -24,6 +25,8 @@ const roleHandyman = require("Creep/Role/Handyman");
  * mine other rooms
  */
 module.exports.loop = function () {
+    improvedConsole.apply();
+
     for (const roomName in Game.rooms) {
         const room = Game.rooms[roomName];
 
