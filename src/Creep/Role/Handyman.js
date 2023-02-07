@@ -42,9 +42,7 @@ const handyman = {
             return;
         }
 
-        const ruins = creep.room.find(FIND_RUINS, {
-            filter: ruin => ruin.store.getUsedCapacity() > 0
-        });
+        const ruins = creep.room.find(FIND_RUINS, {filter: ruin => ruin.store.getUsedCapacity() > 0});
         if (ruins.length) {
             if (creep.store.getUsedCapacity() > 0) {
                 creep.fillSpawnsWithEnergy();

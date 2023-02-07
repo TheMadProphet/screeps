@@ -1,4 +1,15 @@
+const roles = {
+    harvester: require("Creep/Role/Harvester"),
+    upgrader: require("Creep/Role/Upgrader"),
+    builder: require("Creep/Role/Builder"),
+    handyman: require("Creep/Role/Handyman")
+};
+
 (function () {
+    this.runRole = function() {
+        roles[this.memory.role].run(this);
+    }
+
     this.findEnergyRepository = function () {
         if (this.room.hasEnergyEmergency()) return null;
         if (this.room.fillersAreEnabled()) return this.storage;

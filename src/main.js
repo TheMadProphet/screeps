@@ -6,10 +6,6 @@ const improvedConsole = require("Util/Console");
 
 const constructor = require("Structure/Constructor");
 const structureTower = require("Structure/Tower");
-const roleHarvester = require("Creep/Role/Harvester");
-const roleBuilder = require("Creep/Role/Builder");
-const roleUpgrader = require("Creep/Role/Upgrader");
-const roleHandyman = require("Creep/Role/Handyman");
 
 /**
  * TODO:
@@ -39,19 +35,5 @@ module.exports.loop = function () {
         room.drawVisuals();
     }
 
-    for (const name in Game.creeps) {
-        const creep = Game.creeps[name];
-        if (creep.memory.role === "harvester") {
-            roleHarvester.run(creep);
-        }
-        if (creep.memory.role === "upgrader") {
-            roleUpgrader.run(creep);
-        }
-        if (creep.memory.role === "builder") {
-            roleBuilder.run(creep);
-        }
-        if (creep.memory.role === "handyman") {
-            roleHandyman.run(creep);
-        }
-    }
+    _.forEach(Game.creeps, creep => creep.runRole());
 };
