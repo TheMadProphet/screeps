@@ -6,13 +6,13 @@ const roles = {
 };
 
 (function () {
-    this.runRole = function() {
+    this.runRole = function () {
         roles[this.memory.role].run(this);
-    }
+    };
 
     this.findEnergyRepository = function () {
         if (this.room.hasEnergyEmergency()) return null;
-        if (this.room.fillersAreEnabled()) return this.storage;
+        if (this.room.fillersAreEnabled()) return this.room.storage;
 
         const closestContainerWithEnergy = this.pos.findClosestByPath(FIND_STRUCTURES, {
             filter: structure =>
