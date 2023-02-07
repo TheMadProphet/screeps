@@ -2,7 +2,8 @@ const roles = {
     harvester: require("Creep/Role/Harvester"),
     upgrader: require("Creep/Role/Upgrader"),
     builder: require("Creep/Role/Builder"),
-    handyman: require("Creep/Role/Handyman")
+    handyman: require("Creep/Role/Handyman"),
+    filler: require("Creep/Role/Filler")
 };
 
 (function () {
@@ -19,8 +20,8 @@ const roles = {
         this.say("💤");
     };
 
-    this.withdrawEnergy = function () {
-        const energyRepository = this.findEnergyRepository();
+    this.withdrawEnergy = function (includeSpawn = true) {
+        const energyRepository = this.findEnergyRepository(includeSpawn);
 
         if (energyRepository && !this.room.hasEnergyEmergency()) {
             this.withdrawFrom(energyRepository);
@@ -46,8 +47,14 @@ const roles = {
         return null;
     };
 
-    this.withdrawFrom = function (target) {
-        if (this.withdraw(target, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+    this.withdrawFrom = function (target, resource = RESOURCE_ENERGY) {
+        if (this.withdraw(target, resource) === ERR_NOT_IN_RANGE) {
+            this.moveTo(target, {visualizePathStyle: {stroke: "#ffaa00"}});
+        }
+    };
+
+    this.transferTo = function (target, resource = RESOURCE_ENERGY) {
+        if (this.transfer(target, resource) === ERR_NOT_IN_RANGE) {
             this.moveTo(target, {visualizePathStyle: {stroke: "#ffaa00"}});
         }
     };
