@@ -10,8 +10,26 @@ const roles = {
         roles[this.memory.role].run(this);
     };
 
-    this.findEnergyRepository = function () {
-        if (this.room.hasEnergyEmergency()) return null;
+    this.idle = function () {
+        const afkFlag = Game.flags["AFK"];
+        if (afkFlag) {
+            this.moveTo(afkFlag);
+        }
+
+        this.say("💤");
+    };
+
+    this.withdrawEnergy = function () {
+        const energyRepository = this.findEnergyRepository();
+
+        if (energyRepository && !this.room.hasEnergyEmergency()) {
+            this.withdrawFrom(energyRepository);
+        } else {
+            this.idle();
+        }
+    };
+
+    this.findEnergyRepository = function (includeSpawn = true) {
         if (this.room.fillersAreEnabled()) return this.room.storage;
 
         const closestContainerWithEnergy = this.pos.findClosestByPath(FIND_STRUCTURES, {
@@ -21,22 +39,16 @@ const roles = {
 
         if (closestContainerWithEnergy) return closestContainerWithEnergy;
 
-        const spawn = this.room.spawn;
-        if (spawn.memory.hasEnoughEnergy && spawn.store.getUsedCapacity(RESOURCE_ENERGY) > 50) {
-            return spawn;
+        if (includeSpawn && this.room.spawn.canBeUsedAsStorage()) {
+            return this.room.spawn;
         }
 
         return null;
     };
 
-    this.withdrawEnergy = function () {
-        const energyRepository = this.findEnergyRepository();
-        if (energyRepository) {
-            if (this.withdraw(energyRepository, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
-                this.moveTo(energyRepository, {visualizePathStyle: {stroke: "#ffaa00"}});
-            }
-        } else {
-            this.idle();
+    this.withdrawFrom = function (target) {
+        if (this.withdraw(target, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+            this.moveTo(target, {visualizePathStyle: {stroke: "#ffaa00"}});
         }
     };
 
@@ -83,14 +95,5 @@ const roles = {
         }
 
         return ERR_FULL;
-    };
-
-    this.idle = function () {
-        const afkFlag = Game.flags["AFK"];
-        if (afkFlag) {
-            this.moveTo(afkFlag);
-        }
-
-        this.say("💤");
     };
 }.call(Creep.prototype));

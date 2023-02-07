@@ -101,6 +101,10 @@ function getUpgraderBody(maxEnergy) {
         }
     };
 
+    this.canBeUsedAsStorage = function () {
+        return this.memory.hasEnoughEnergy && this.store.getUsedCapacity() > 50;
+    };
+
     this.spawnRoles = function () {
         this.memory.hasEnoughEnergy = true;
 
