@@ -43,7 +43,7 @@
             const x = uiFlag.pos.x + 1;
             let y = uiFlag.pos.y;
 
-            const progress = (this.controller.progress / this.controller.progressTotal).toFixed(2) * 100;
+            const progress = Math.trunc((this.controller.progress / this.controller.progressTotal) * 100);
             this.visual.text(`Controller[${this.controller.level}]: ${progress}%`, x, y++, {
                 align: "left",
                 color: "#5a37cc",
