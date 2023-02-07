@@ -27,7 +27,7 @@ const harvester = {
                 }
             }
         } else {
-            if (creep.fillMyStructuresWithEnergy() === ERR_FULL) {
+            if (creep.fillSpawnsWithEnergy() === ERR_FULL) {
                 if (creep.fillContainersWithEnergy() === ERR_FULL) {
                     creep.idle();
                 }
@@ -42,7 +42,7 @@ const harvester = {
                 creep.moveTo(sources[0], {visualizePathStyle: {stroke: "#ffaa00"}});
             }
         } else {
-            if (creep.fillMyStructuresWithEnergy() === ERR_FULL) {
+            if (creep.fillSpawnsWithEnergy() === ERR_FULL) {
                 if (creep.fillContainersWithEnergy() === ERR_FULL) {
                     creep.idle();
                 }

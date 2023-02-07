@@ -139,6 +139,7 @@ function buildSourceInfrastructure(spawn, source) {
         }
 
         roomMemory.sources[source.id].maxWorkerCount = maxWorkerCount;
+        roomMemory.sources[source.id].distanceToSpawn = spawn.pos.findPathTo(source).length;
     }
 }
 

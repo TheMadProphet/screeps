@@ -16,33 +16,6 @@ const getRepairableStructures = room => {
     });
 };
 
-const transferFromContainersToMyStructures = creep => {
-    const myStructures = creep.room.find(FIND_MY_STRUCTURES, {
-        filter: structure => {
-            return (
-                (structure.structureType === STRUCTURE_EXTENSION ||
-                    structure.structureType === STRUCTURE_SPAWN ||
-                    structure.structureType === STRUCTURE_TOWER) &&
-                structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0
-            );
-        }
-    });
-
-    if (myStructures.length > 0) {
-        if (creep.transfer(myStructures[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
-            creep.moveTo(myStructures[0], {visualizePathStyle: {stroke: "#ffffff"}});
-        }
-
-        return OK;
-    }
-};
-
-const getStructuresWithFreeCapacity = room => {
-    return room.find(FIND_STRUCTURES, {
-        filter: structure => structure.store === STRUCTURE_CONTAINER
-    });
-};
-
 const handyman = {
     /** @param {Creep} creep **/
     run: function (creep) {
@@ -56,7 +29,7 @@ const handyman = {
         }
 
         if (!creep.memory.working) {
-            creep.takeEnergyFromBestSource();
+            creep.withdrawEnergy();
             return;
         }
 
@@ -74,7 +47,7 @@ const handyman = {
         });
         if (ruins.length) {
             if (creep.store.getUsedCapacity() > 0) {
-                creep.fillMyStructuresWithEnergy();
+                creep.fillSpawnsWithEnergy();
             } else {
                 if (creep.withdraw(ruins[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(ruins[0], {visualizePathStyle: {stroke: "#ffffff"}});
@@ -87,7 +60,7 @@ const handyman = {
         const droppedEnergies = creep.room.find(FIND_DROPPED_RESOURCES);
         if (droppedEnergies.length) {
             if (creep.store.getUsedCapacity() > 0) {
-                creep.fillMyStructuresWithEnergy();
+                creep.fillSpawnsWithEnergy();
             } else {
                 if (creep.pickup(droppedEnergies[0]) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(droppedEnergies[0], {visualizePathStyle: {stroke: "#ffffff"}});
@@ -96,8 +69,6 @@ const handyman = {
 
             return;
         }
-        // const fillStatus = creep.fillMyStructuresWithEnergy();
-        // if (fillStatus === OK) return;
 
         creep.idle();
     }

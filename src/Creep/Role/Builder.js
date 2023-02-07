@@ -25,7 +25,7 @@ const builder = {
         if (creep.memory.building) {
             creep.buildConstruction();
         } else {
-            creep.takeEnergyFromBestSource();
+            creep.withdrawEnergy();
         }
     }
 };

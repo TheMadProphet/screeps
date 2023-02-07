@@ -19,7 +19,7 @@ const upgrader = {
         if (creep.memory.upgrading) {
             creep.moveToAndUpgradeController();
         } else {
-            creep.takeEnergyFromBestSource();
+            creep.withdrawEnergy();
         }
     }
 };

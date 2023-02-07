@@ -17,7 +17,7 @@ const roleHandyman = require("Creep/Role/Handyman");
  *
  * use foreach instead of for
  *
- * filler role, build containers near sources
+ * filler, miner, hauler roles. External room mining
  *
  * harvesters spawn #1
  *

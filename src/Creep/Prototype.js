@@ -1,42 +1,35 @@
 (function () {
-    this.findBestEnergySource = function () {
+    this.findEnergyRepository = function () {
+        if (this.room.hasEnergyEmergency()) return null;
+        if (this.room.fillersAreEnabled()) return this.storage;
+
         const closestContainerWithEnergy = this.pos.findClosestByPath(FIND_STRUCTURES, {
             filter: structure =>
-                (structure.structureType === STRUCTURE_CONTAINER && structure.store.getUsedCapacity() > 50) ||
-                (structure.structureType === STRUCTURE_STORAGE && structure.store.getUsedCapacity(RESOURCE_ENERGY) > 50)
+                structure.structureType === STRUCTURE_CONTAINER && structure.store.getUsedCapacity() > 50
         });
 
-        if (closestContainerWithEnergy) {
-            return closestContainerWithEnergy;
+        if (closestContainerWithEnergy) return closestContainerWithEnergy;
+
+        const spawn = this.room.spawn;
+        if (spawn.memory.hasEnoughEnergy && spawn.store.getUsedCapacity(RESOURCE_ENERGY) > 50) {
+            return spawn;
         }
 
-        return this.pos.findClosestByPath(FIND_MY_SPAWNS, {
-            filter: spawn => spawn.memory.hasEnoughEnergy && spawn.store.getUsedCapacity(RESOURCE_ENERGY) > 50
-        });
+        return null;
     };
 
-    this.takeEnergyFrom = function (target) {
-        if (hasEnergyStorage(target)) {
-            if (this.withdraw(target, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
-                this.moveTo(target, {visualizePathStyle: {stroke: "#ffaa00"}});
+    this.withdrawEnergy = function () {
+        const energyRepository = this.findEnergyRepository();
+        if (energyRepository) {
+            if (this.withdraw(energyRepository, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+                this.moveTo(energyRepository, {visualizePathStyle: {stroke: "#ffaa00"}});
             }
-        } else if (isEnergyMine(this, target)) {
-            if (this.harvest(target) === ERR_NOT_IN_RANGE) {
-                this.moveTo(target, {visualizePathStyle: {stroke: "#ffaa00"}});
-            }
-        }
-    };
-
-    this.takeEnergyFromBestSource = function () {
-        const closestSource = this.findBestEnergySource();
-        if (closestSource) {
-            this.takeEnergyFrom(closestSource);
         } else {
             this.idle();
         }
     };
 
-    this.fillMyStructuresWithEnergy = function () {
+    this.fillSpawnsWithEnergy = function () {
         const closestStructure = this.pos.findClosestByPath(FIND_MY_STRUCTURES, {
             filter: structure => {
                 return (
@@ -90,17 +83,3 @@
         this.say("💤");
     };
 }.call(Creep.prototype));
-
-// todo improve (.store)
-const hasEnergyStorage = target => {
-    return (
-        target.structureType === STRUCTURE_SPAWN ||
-        target.structureType === STRUCTURE_EXTENSION ||
-        target.structureType === STRUCTURE_CONTAINER ||
-        target.structureType === STRUCTURE_STORAGE
-    );
-};
-
-const isEnergyMine = (creep, target) => {
-    return creep.harvest(target) !== ERR_INVALID_TARGET;
-};

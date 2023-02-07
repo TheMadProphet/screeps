@@ -27,6 +27,16 @@
         }
     };
 
+    this.fillersAreEnabled = function() {
+        return this.controller.level >= 4 && this.storage;
+    };
+
+    this.hasEnergyEmergency = function() {
+        if (!this.storage) return false;
+
+        return this.storage.store.getUsedCapacity(RESOURCE_ENERGY) >= this.energyCapacityAvailable * 2;
+    };
+
     this.drawVisuals = function () {
         const uiFlag = Game.flags["UI"];
         if (uiFlag) {

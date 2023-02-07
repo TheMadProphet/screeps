@@ -125,8 +125,8 @@ function getUpgraderBody(maxEnergy) {
             }
         });
 
-        _.forEach(sources, (source, sourceId) => {
-            if (source.assignedWorkers.length < source.maxWorkerCount) {
+        _.forEach(sources, (sourceMemory, sourceId) => {
+            if (sourceMemory.assignedWorkers.length < sourceMemory.maxWorkerCount) {
                 const body = getBasicBody(this.room.energyCapacityAvailable);
                 this.spawn(body, {role: "harvester", assignedSource: sourceId});
             }
@@ -155,6 +155,7 @@ function getUpgraderBody(maxEnergy) {
             maxUpgraders = 3;
         }
 
+        maxUpgraders = 1; // todo
         if (!upgraders || !upgraders.length || upgraders.length < maxUpgraders) {
             const body = getUpgraderBody(this.room.energyCapacityAvailable);
             this.spawn(body, {role: "upgrader"});
