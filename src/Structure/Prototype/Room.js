@@ -26,6 +26,57 @@
             }
         }
     };
+
+    this.drawVisuals = function () {
+        const uiFlag = Game.flags["UI"];
+        if (uiFlag) {
+            const x = uiFlag.pos.x + 1;
+            let y = uiFlag.pos.y;
+
+            const progress = (this.controller.progress / this.controller.progressTotal).toFixed(2) * 100;
+            this.visual.text(`Controller[${this.controller.level}]: ${progress}%`, x, y++, {
+                align: "left",
+                color: "#5a37cc",
+                stroke: "#000000",
+                strokeWidth: 0.1
+            });
+            this.drawRoleStats(x, y++, "upgrader");
+
+            y++;
+            this.visual.text(`Spawn: ${this.energyAvailable}/${this.energyCapacityAvailable}`, x, y++, {
+                align: "left",
+                color: "#e09107",
+                stroke: "#000000",
+                strokeWidth: 0.1
+            });
+            const storage = this.storage.store;
+            this.visual.text(`Storage: ${(storage.getUsedCapacity(RESOURCE_ENERGY) / 1000).toFixed(2)}K`, x, y++, {
+                align: "left",
+                color: "#e09107",
+                stroke: "#000000",
+                strokeWidth: 0.1
+            });
+            this.drawRoleStats(x, y++, "harvester");
+
+            y++;
+            this.drawRoleStats(x, y++, "builder");
+            this.drawRoleStats(x, y++, "handyman");
+        }
+    };
+
+    this.drawRoleStats = function (x, y, role) {
+        let count = 0;
+        if (this.spawn.creepsByRole[role]) {
+            count = this.spawn.creepsByRole[role].length;
+        }
+
+        this.visual.text(`${role}: ${count}`, x, y, {
+            align: "left",
+            color: "#a6a6a6",
+            stroke: "#000000",
+            strokeWidth: 0.05
+        });
+    };
 }.call(Room.prototype));
 
 Object.defineProperty(Room.prototype, "spawn", {

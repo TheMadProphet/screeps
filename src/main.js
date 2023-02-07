@@ -11,7 +11,7 @@ const roleHandyman = require("Creep/Role/Handyman");
 
 /**
  * TODO:
- * remove tombstones/ruins
+ * role count based on WORK / available energy per tick
  *
  * use foreach instead of for
  * console log improvement
@@ -19,7 +19,6 @@ const roleHandyman = require("Creep/Role/Handyman");
  * filler role, build containers near sources
  *
  * harvesters spawn #1
- * determine amount of extra upgraders (distance)
  *
  * auto tower placement
  * mine other rooms
@@ -34,6 +33,7 @@ module.exports.loop = function () {
         room.spawn.automate();
 
         structureTower.automate(Game.getObjectById("63dda0ea034ca354399c6fce")); // todo
+        room.drawVisuals();
     }
 
     for (const name in Game.creeps) {
