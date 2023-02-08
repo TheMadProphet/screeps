@@ -103,4 +103,4 @@ const roles = {
 
         return ERR_FULL;
     };
-}.call(Creep.prototype));
+}).call(Creep.prototype);

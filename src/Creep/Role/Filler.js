@@ -20,15 +20,15 @@ const filler = {
     /** @param {Creep} creep **/
     gatherEnergy: function (creep) {
         if (creep.room.energyAvailable !== creep.room.energyCapacityAvailable) {
-            creep.withdrawFrom(this.room.storage);
+            creep.withdrawFrom(creep.room.storage);
         } else {
             const containersWithEnergy = creep.room.find(FIND_STRUCTURES, {
                 filter: structure =>
                     structure.structureType === STRUCTURE_CONTAINER && structure.store.getUsedCapacity() > 50
             });
 
-            if (containersWithEnergy) {
-                creep.withdrawFrom(containersWithEnergy);
+            if (containersWithEnergy.length) {
+                creep.withdrawFrom(containersWithEnergy[0]);
             } else {
                 creep.idle();
             }
