@@ -102,7 +102,7 @@ function extraCreepCountForDistance(start, end) {
 
         _.forEach(sources, (sourceMemory, sourceId) => {
             if (sourceMemory.assignedWorkers.length < sourceMemory.maxWorkerCount) {
-                const body = new Body(basicParts).duplicateParts();
+                const body = new Body(basicParts).duplicateParts(5);
                 this.spawn(body, {role: "harvester", assignedSource: sourceId});
             }
         });

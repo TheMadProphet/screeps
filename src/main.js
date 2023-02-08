@@ -9,17 +9,14 @@ const structureTower = require("Structure/Tower");
 
 /**
  * TODO:
+ * move data that is used as cache inside memory.cache
+ *
  * role count based on WORK / available energy per tick
- *
- * use foreach instead of for
- *
- * filler, miner, hauler roles. External room mining
- *
+ * refactor spawner
  * harvesters spawn #1
- * sort body parts
  *
  * auto tower placement
- * mine other rooms
+ * miner, hauler roles. External room mining
  */
 module.exports.loop = function () {
     ConsoleUtil.improveLog();
