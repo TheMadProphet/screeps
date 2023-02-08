@@ -1,3 +1,14 @@
+const Body = require("Creep/Body");
+
+const basicParts = [WORK, CARRY, MOVE];
+
+function getUpgraderBody(maxEnergy) {
+    const body = new Body([WORK, WORK, WORK, CARRY, MOVE, MOVE]).duplicateParts(maxEnergy);
+    const basicBody = new Body(basicParts).duplicateParts(maxEnergy - body.cost());
+
+    return body.merge(basicBody);
+}
+
 /**
  * @param {RoomPosition} start
  * @param {RoomPosition} end
@@ -8,58 +19,12 @@ function extraCreepCountForDistance(start, end) {
     return Math.trunc(distance / 15);
 }
 
-function bodyCost(body) {
-    let cost = 0;
-
-    _.forEach(body, part => {
-        switch (part) {
-            case WORK:
-                cost += 100;
-                break;
-            case CARRY:
-            case MOVE:
-                cost += 50;
-        }
-    });
-
-    return cost;
-}
-
-function getBasicBody(maxEnergy) {
-    const basicParts = [WORK, CARRY, MOVE];
-    const basicPartFitCount = Math.trunc(maxEnergy / bodyCost(basicParts));
-
-    let body = [];
-    for (let i = 0; i < basicPartFitCount; i++) {
-        body.push(...basicParts);
-    }
-
-    return body;
-}
-
-function getUpgraderBody(maxEnergy) {
-    const upgraderPartsConfig = [WORK, WORK, WORK, CARRY, MOVE, MOVE];
-    const upgraderPartsCost = bodyCost(upgraderPartsConfig);
-
-    if (upgraderPartsCost > maxEnergy) {
-        return getBasicBody(maxEnergy);
-    }
-
-    const upgraderPartFitCount = Math.trunc(maxEnergy / upgraderPartsCost);
-    let body = getBasicBody(maxEnergy - upgraderPartsCost * upgraderPartFitCount);
-    for (let i = 0; i < upgraderPartFitCount; i++) {
-        body.push(...upgraderPartsConfig);
-    }
-
-    return body;
-}
-
 (function () {
+    /** @type {Object.<string, Creep[]>} */
     this.creepsByRole = {};
 
     this.automate = function () {
         this.creepsByRole = {};
-        // todo try foreach here once done and tested
         for (const name in Memory.creeps) {
             const creep = Game.creeps[name];
             if (!creep) {
@@ -79,9 +44,13 @@ function getUpgraderBody(maxEnergy) {
         this.displayVisuals();
     };
 
+    /**
+     * @param {Body} body
+     * @param memory
+     */
     this.spawn = function (body, memory) {
-        const creepName = `${memory.role}[${bodyCost(body)}]`;
-        const spawnStatus = this.spawnCreep(body.sort(), creepName + `(${Game.time})`, {memory});
+        const creepName = `${memory.role}[${body.cost()}]`;
+        const spawnStatus = this.spawnCreep(body.getParts(), creepName + `(${Game.time})`, {memory});
 
         if (spawnStatus === ERR_NOT_ENOUGH_ENERGY) {
             this.memory.hasEnoughEnergy = false;
@@ -102,11 +71,12 @@ function getUpgraderBody(maxEnergy) {
     };
 
     this.canBeUsedAsStorage = function () {
-        return this.memory.hasEnoughEnergy && this.store.getUsedCapacity() > 50;
+        return this.memory.hasEnoughEnergy && this.store.getUsedCapacity(RESOURCE_ENERGY) > 50;
     };
 
     this.spawnRoles = function () {
         this.memory.hasEnoughEnergy = true;
+        Body.maxEnergy = this.room.energyCapacityAvailable;
 
         this.spawnHandymen();
         this.spawnUpgraders();
@@ -131,7 +101,7 @@ function getUpgraderBody(maxEnergy) {
 
         _.forEach(sources, (sourceMemory, sourceId) => {
             if (sourceMemory.assignedWorkers.length < sourceMemory.maxWorkerCount) {
-                const body = getBasicBody(this.room.energyCapacityAvailable);
+                const body = new Body(basicParts).duplicateParts();
                 this.spawn(body, {role: "harvester", assignedSource: sourceId});
             }
         });
@@ -142,7 +112,7 @@ function getUpgraderBody(maxEnergy) {
             const builders = this.creepsByRole["builder"];
             const maxBuilders = 2;
             if (!builders || !builders.length || builders.length < maxBuilders) {
-                const body = getBasicBody(this.room.energyCapacityAvailable);
+                const body = new Body(basicParts).duplicateParts();
                 this.spawn(body, {role: "builder"});
             }
         }
@@ -169,7 +139,7 @@ function getUpgraderBody(maxEnergy) {
     this.spawnHandymen = function () {
         const handymen = this.creepsByRole["handyman"];
         if (this.room.controller.level >= 2 && (!handymen || !handymen.length)) {
-            const body = getBasicBody(this.room.energyCapacityAvailable);
+            const body = new Body(basicParts).duplicateParts();
             this.spawn(body, {role: "handyman"});
         }
     };

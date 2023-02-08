@@ -28,7 +28,12 @@
     };
 
     this.fillersAreEnabled = function () {
-        return this.controller.level >= 4 && this.storage !== null && this.storage !== undefined;
+        return (
+            this.controller.level >= 4 &&
+            this.availableExtension === 0 &&
+            this.storage !== null &&
+            this.storage !== undefined
+        );
     };
 
     this.hasEnergyEmergency = function () {
