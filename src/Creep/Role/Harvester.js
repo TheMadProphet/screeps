@@ -37,8 +37,14 @@ const harvester = {
 
     /** @param {Creep} creep **/
     storeEnergy: function (creep) {
-        if (creep.fillSpawnsWithEnergy() === ERR_FULL && creep.fillContainersWithEnergy() === ERR_FULL) {
-            creep.idle();
+        if (creep.room.fillersAreEnabled()) {
+            if (creep.fillContainersWithEnergy() === ERR_FULL) {
+                creep.idle();
+            }
+        } else {
+            if (creep.fillSpawnsWithEnergy() === ERR_FULL && creep.fillContainersWithEnergy() === ERR_FULL) {
+                creep.idle();
+            }
         }
     }
 };
