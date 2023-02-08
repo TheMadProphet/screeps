@@ -1,5 +1,7 @@
 module.exports = function (grunt) {
     const config = require("./.screeps.json");
+    const branch = grunt.option("branch") ?? config.branch;
+    const private_directory = config.private_directory + branch;
 
     grunt.loadNpmTasks("grunt-screeps");
     grunt.loadNpmTasks("grunt-contrib-clean");
@@ -12,13 +14,14 @@ module.exports = function (grunt) {
             options: {
                 email: config.email,
                 token: config.token,
-                branch: grunt.option("branch"),
+                branch: branch,
                 ptr: config.ptr
             },
             dist: {
                 src: ["dist/*.js"]
             }
         },
+
         watch: {
             scripts: {
                 files: ["src/**/*.js"],
@@ -28,11 +31,13 @@ module.exports = function (grunt) {
                 }
             }
         },
+
         clean: {
             dist: ["dist/"]
         },
+
         copy: {
-            screeps: {
+            dist: {
                 files: [
                     {
                         expand: true,
@@ -46,8 +51,19 @@ module.exports = function (grunt) {
                         }
                     }
                 ]
+            },
+            steam: {
+                files: [
+                    {
+                        expand: true,
+                        cwd: "./dist/",
+                        src: "**",
+                        dest: private_directory
+                    }
+                ]
             }
         },
+
         "string-replace": {
             dist: {
                 files: [
@@ -70,5 +86,9 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.registerTask("deploy", ["clean", "copy:screeps", "string-replace", "screeps"]);
+    if (config.private_directory) {
+        grunt.registerTask("deploy", ["clean", "copy:dist", "string-replace:dist", "screeps", "copy:steam"]);
+    } else {
+        grunt.registerTask("deploy", ["clean", "copy:dist", "string-replace:dist", "screeps"]);
+    }
 };

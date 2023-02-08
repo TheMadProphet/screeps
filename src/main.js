@@ -17,6 +17,8 @@ const structureTower = require("Structure/Tower");
  *
  * auto tower placement
  * miner, hauler roles. External room mining
+ *
+ * emergency spawn
  */
 module.exports.loop = function () {
     ConsoleUtil.improveLog();
