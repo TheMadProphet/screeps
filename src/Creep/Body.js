@@ -1,8 +1,8 @@
-let Body = function (parts) {
-    this.parts = parts;
+/** @param {StructureSpawn} spawner */
+let Body = function (spawner) {
+    this.totalEnergy = spawner.room.energyCapacityAvailable;
+    this.parts = [];
 };
-
-Body.maxEnergy = 0;
 
 Body.prototype = {
     getParts() {
@@ -10,9 +10,26 @@ Body.prototype = {
     },
 
     cost() {
+        return this.calculateCost(this.getParts());
+    },
+
+    addParts(parts, amount = 1) {
+        const maxAmount = Math.trunc(this.totalEnergy / this.calculateCost(parts));
+        const partsToAdd = Math.min(amount, maxAmount);
+
+        for (let i = 0; i < partsToAdd; i++) {
+            this.parts.push(...parts);
+        }
+
+        this.totalEnergy -= partsToAdd * this.calculateCost(parts);
+
+        return this;
+    },
+
+    calculateCost(parts) {
         let cost = 0;
 
-        _.forEach(this.getParts(), part => {
+        _.forEach(parts, part => {
             switch (part) {
                 case WORK:
                     cost += 100;
@@ -24,28 +41,6 @@ Body.prototype = {
         });
 
         return cost;
-    },
-
-    duplicateParts(cap = 100) {
-        const bodyParts = this.parts;
-        const fitAmount = Math.trunc(Body.maxEnergy / this.cost(this.parts));
-
-        this.parts = [];
-        this.add(bodyParts, Math.min(fitAmount, cap));
-
-        return this;
-    },
-
-    merge(body) {
-        this.add(body.getParts());
-
-        return this;
-    },
-
-    add(parts, n = 1) {
-        for (let i = 0; i < n; i++) {
-            this.parts.push(...parts);
-        }
     }
 };
 

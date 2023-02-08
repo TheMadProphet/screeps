@@ -2,13 +2,6 @@ const Body = require("Creep/Body");
 
 const basicParts = [WORK, CARRY, MOVE];
 
-function getUpgraderBody(maxEnergy) {
-    const body = new Body([WORK, WORK, WORK, CARRY, MOVE, MOVE]).duplicateParts(maxEnergy);
-    const basicBody = new Body(basicParts).duplicateParts(maxEnergy - body.cost());
-
-    return body.merge(basicBody);
-}
-
 /**
  * @param {RoomPosition} start
  * @param {RoomPosition} end
@@ -102,7 +95,7 @@ function extraCreepCountForDistance(start, end) {
 
         _.forEach(sources, (sourceMemory, sourceId) => {
             if (sourceMemory.assignedWorkers.length < sourceMemory.maxWorkerCount) {
-                const body = new Body(basicParts).duplicateParts(5);
+                const body = new Body(this).addParts(basicParts, 6);
                 this.spawn(body, {role: "harvester", assignedSource: sourceId});
             }
         });
@@ -113,7 +106,7 @@ function extraCreepCountForDistance(start, end) {
             const builders = this.creepsByRole["builder"];
             const maxBuilders = 2;
             if (!builders || !builders.length || builders.length < maxBuilders) {
-                const body = new Body(basicParts).duplicateParts();
+                const body = new Body(this).addParts(basicParts, 5);
                 this.spawn(body, {role: "builder"});
             }
         }
@@ -132,7 +125,7 @@ function extraCreepCountForDistance(start, end) {
 
         maxUpgraders = 1; // todo
         if (!upgraders || !upgraders.length || upgraders.length < maxUpgraders) {
-            const body = getUpgraderBody(this.room.energyCapacityAvailable);
+            const body = new Body(this).addParts([WORK, WORK, WORK, CARRY, MOVE, MOVE], 2).addParts(basicParts, 2);
             this.spawn(body, {role: "upgrader"});
         }
     };
@@ -143,7 +136,7 @@ function extraCreepCountForDistance(start, end) {
             const maxFillers = 1;
 
             if (!fillers || !fillers.length || fillers.length < maxFillers) {
-                const body = new Body([CARRY, MOVE]).duplicateParts(10);
+                const body = new Body(this).addParts([CARRY, CARRY, MOVE], 7);
                 this.spawn(body, {role: "filler"});
             }
         }
@@ -152,7 +145,7 @@ function extraCreepCountForDistance(start, end) {
     this.spawnHandymen = function () {
         const handymen = this.creepsByRole["handyman"];
         if (this.room.controller.level >= 2 && (!handymen || !handymen.length)) {
-            const body = new Body(basicParts).duplicateParts(3);
+            const body = new Body(this).addParts(basicParts, 3);
             this.spawn(body, {role: "handyman"});
         }
     };
