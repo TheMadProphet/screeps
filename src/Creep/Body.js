@@ -26,12 +26,12 @@ Body.prototype = {
         return cost;
     },
 
-    duplicateParts() {
+    duplicateParts(cap = 100) {
         const bodyParts = this.parts;
         const fitAmount = Math.trunc(Body.maxEnergy / this.cost(this.parts));
 
         this.parts = [];
-        this.add(bodyParts, fitAmount);
+        this.add(bodyParts, Math.min(fitAmount, cap));
 
         return this;
     },

@@ -78,6 +78,7 @@ function extraCreepCountForDistance(start, end) {
         this.memory.hasEnoughEnergy = true;
         Body.maxEnergy = this.room.energyCapacityAvailable;
 
+        this.spawnFillers();
         this.spawnHandymen();
         this.spawnUpgraders();
         this.spawnBuilders();
@@ -136,10 +137,22 @@ function extraCreepCountForDistance(start, end) {
         }
     };
 
+    this.spawnFillers = function () {
+        if (this.room.fillersAreEnabled()) {
+            const fillers = this.creepsByRole["filler"];
+            const maxFillers = 1;
+
+            if (!fillers || !fillers.length || fillers.length < maxFillers) {
+                const body = new Body([CARRY, MOVE]).duplicateParts(10);
+                this.spawn(body, {role: "filler"});
+            }
+        }
+    };
+
     this.spawnHandymen = function () {
         const handymen = this.creepsByRole["handyman"];
         if (this.room.controller.level >= 2 && (!handymen || !handymen.length)) {
-            const body = new Body(basicParts).duplicateParts();
+            const body = new Body(basicParts).duplicateParts(3);
             this.spawn(body, {role: "handyman"});
         }
     };
