@@ -123,7 +123,6 @@ function extraCreepCountForDistance(start, end) {
             maxUpgraders = 3;
         }
 
-        maxUpgraders = 1; // todo
         if (!upgraders || !upgraders.length || upgraders.length < maxUpgraders) {
             const body = new Body(this).addParts([WORK, WORK, WORK, CARRY, MOVE, MOVE], 2).addParts(basicParts, 2);
             this.spawn(body, {role: "upgrader"});

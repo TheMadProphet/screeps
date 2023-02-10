@@ -1,8 +1,6 @@
 const consoleLog = console.log;
 
-/**
- * Override original console.log() and convert objects to JSON string
- */
+/** Override original console.log(), convert object parameters to JSON string */
 function improveLog() {
     console.log = function (...dataList) {
         const transformedData = _.map(dataList, data => {
